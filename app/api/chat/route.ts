@@ -9,6 +9,7 @@ import { type MongoClient } from 'mongodb';
 import { loadRetriever } from '../utils/vector_store';
 import { loadEmbeddingsModel } from '../utils/embeddings';
 
+
 export const runtime =
   process.env.NEXT_PUBLIC_VECTORSTORE === 'mongodb' ? 'nodejs' : 'edge';
 
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
       temperature: 0,
     });
 
-    const embeddings = loadEmbeddingsModel();
+    const embeddings = await loadEmbeddingsModel();
 
     let resolveWithDocuments: (value: Document[]) => void;
     const documentPromise = new Promise<Document[]>((resolve) => {
