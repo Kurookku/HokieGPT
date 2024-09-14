@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: sudo su
         run: echo sudo su
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       
