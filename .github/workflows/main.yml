@@ -11,9 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-
+      - name: pm2 stop
+        run: pm2 stop 0
 
       - name: rebuild
         run: npm i
+
+      - name: pm2 run
+        run: pm2 start 0
 
       

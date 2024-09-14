@@ -15,7 +15,7 @@ router.get('/', async function(request, response, next) {
   response.setHeader('Cache-Control', 'public, max-age=30');
   response.status(200);
 
-  response.send("Hello Hokies!")
+  response.send("Hello Hokies!!!!!!")
 
   // response.render(path.join(app.get('views'), 'index.pug'), {
   //     title: request.app.locals.site_name
