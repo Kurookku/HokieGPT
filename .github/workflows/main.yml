@@ -9,8 +9,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: sudo su
-        run: echo sudo su
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       
