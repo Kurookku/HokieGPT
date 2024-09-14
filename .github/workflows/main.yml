@@ -16,5 +16,4 @@ jobs:
 
       - name: pm2 run
         run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 start "npm run dev" --name HokieGPT
-
       
