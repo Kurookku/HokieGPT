@@ -1,0 +1,34 @@
+div(classname='mx-auto flex flex-col gap-4 container mt-10')
+  h1(classname='text-4xl leading-[1.1] tracking-tighter font-medium text-center')
+    | Chat With Your PDFs
+  |       {docsList.length &gt; 0 &amp;&amp; (
+  div(classname='flex flex-col gap-4 mx-10 my-5')
+    div(classname='flex flex-col shadow-sm border divide-y-2 sm:min-w-[650px] mx-auto')
+      | {docsList.map((doc: any) =&gt; (
+      div(key='{doc.id}' classname='flex justify-between p-3 hover:bg-gray-100 transition sm:flex-row flex-col sm:gap-0 gap-3')
+        button(onclick='{()')
+          | router.push(&grave;/document/${doc.id}&grave;)}
+          | className=&quot;flex gap-4&quot;
+          | &gt;
+          docicon
+            span {doc.fileName}
+        span {formatDistanceToNow(doc.createdAt)} ago
+      |             ))}
+  |       )}
+  |       {docsList.length &gt; 0 ? (
+  h2(classname='text-3xl leading-[1.1] tracking-tighter font-medium text-center')
+    | Or upload a new PDF
+  |       ) : (
+  h2(classname='text-3xl leading-[1.1] tracking-tighter font-medium text-center mt-5')
+    | No PDFs found. Upload a new PDF below!
+  |       )}
+  div(classname='mx-auto min-w-[450px] flex justify-center')
+    | {loading ? (
+    button(type='button' classname='inline-flex items-center mt-4 px-4 py-2 font-semibold leading-6 text-lg shadow rounded-md text-black transition ease-in-out duration-150 cursor-not-allowed')
+      svg(classname='animate-spin -ml-1 mr-3 h-5 w-5 text-black' xmlns='http://www.w3.org/2000/svg' fill='none' viewbox='0 0 24 24')
+        circle(classname='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4')
+        path(classname='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z')
+      |             Ingesting your PDF...
+    |         ) : (
+    uploaddropzone
+      | )}
