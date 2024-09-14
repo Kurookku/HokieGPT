@@ -1,0 +1,7 @@
+openai
+flask
+
+pdf2image
+# poppler
+
+python-dotenv
