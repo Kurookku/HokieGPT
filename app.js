@@ -12,7 +12,6 @@ var path         = require('path');
 
 // custom
 var logger = require('./logger');
-// testting
 
 //////////////////////////////////////////////////
 // initialization
