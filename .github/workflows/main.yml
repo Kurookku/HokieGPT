@@ -14,7 +14,7 @@ jobs:
       # - name: rebuild
       #   run: npm i
 
-      # - name: pm2 run
-      #   run: pm2 start /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/process.json
+      - name: pm2 run
+        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 start "npm run dev" --name HokieGPT
 
       
