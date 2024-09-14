@@ -14,9 +14,6 @@ jobs:
       - name: rebuild
         run: npm i
 
-      - name: pm2 run
-        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 start "npm run dev" --name HokieGPT
-
       - name: secrets
         run: |
           printf "\nTOGETHER_AI_API_KEY=${{ secrets.TOGETHER_AI_API_KEY }}\n
@@ -28,4 +25,8 @@ jobs:
           POSTGRES_URL=${{ secrets.POSTGRES_URL }}\n
           POSTGRES_URL_NON_POOLING=${{ secrets.POSTGRES_URL_NON_POOLING }}\n
           POSTGRES_PRISMA_URL=${{ secrets.POSTGRES_PRISMA_URL }}" >> ./.env
+
+      - name: pm2 run
+      run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 delete 0 && pm2 start "npm run dev" --name HokieGPT
+
           
