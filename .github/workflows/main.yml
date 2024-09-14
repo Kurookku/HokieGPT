@@ -26,7 +26,7 @@ jobs:
           POSTGRES_URL_NON_POOLING=${{ secrets.POSTGRES_URL_NON_POOLING }}\n
           POSTGRES_PRISMA_URL=${{ secrets.POSTGRES_PRISMA_URL }}" >> ./.env
 
-      - name: pm2 run
-        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 delete 0 && pm2 start "npm run dev" --name HokieGPT
+      - name: pm2 run node
+        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 delete all && pm2 start "npm run dev" --name HokieGPT_node
 
           
