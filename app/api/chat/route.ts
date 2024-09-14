@@ -8,6 +8,7 @@ import { ChatTogetherAI } from '@langchain/community/chat_models/togetherai';
 import { type MongoClient } from 'mongodb';
 import { loadRetriever } from '../utils/vector_store';
 import { loadEmbeddingsModel } from '../utils/embeddings';
+import { ChatOpenAI } from "@langchain/openai";
 
 
 export const runtime =
@@ -48,11 +49,15 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
     const chatId = body.chatId;
 
-    const model = new ChatTogetherAI({
-      modelName: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-      temperature: 0,
+    //const model = new ChatTogetherAI({
+    //  modelName: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+    //  temperature: 0,
+    //});
+    const model = new ChatOpenAI({
+      modelName: 'gpt-4-1106-preview',
+      apiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.1,
     });
-
     const embeddings = await loadEmbeddingsModel();
 
     let resolveWithDocuments: (value: Document[]) => void;
@@ -69,11 +74,12 @@ export async function POST(req: NextRequest) {
             // Extract retrieved source documents so that they can be displayed as sources
             // on the frontend.
             resolveWithDocuments(documents);
+            console.log('Retrieved documents:', documents);
           },
         },
       ],
     });
-
+    console.log('retrieverInfo', retrieverInfo);
     const retriever = retrieverInfo.retriever;
     mongoDbClient = retrieverInfo.mongoDbClient;
 
