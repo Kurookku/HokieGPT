@@ -1,11 +1,14 @@
-name: Automate Pull
+name: Node Build
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  run_pull:
+  build:
     runs-on: self-hosted
+
+    steps:
+      - run: echo "Test"
 
       
