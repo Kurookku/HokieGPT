@@ -15,6 +15,6 @@ jobs:
         run: npm i
 
       - name: pm2 run
-        run: pm2 start actions-runner/_work/HokieGPT/HokieGPT/process.json
+        run: pm2 start /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/process.json
 
       
