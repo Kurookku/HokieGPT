@@ -1,0 +1,7 @@
+openai
+flask
+requests
+pdf2image
+# apt-get install poppler-utils
+
+python-dotenv
