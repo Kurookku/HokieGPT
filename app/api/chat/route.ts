@@ -14,7 +14,6 @@ import { classifyIntent, adjustPDF } from '../flaskAPI/helper';
 import { loadMongoDBStore } from '../utils/vector_store/mongo'; // Import the MongoDB store helper function
 
 
-
 export const runtime =
   process.env.NEXT_PUBLIC_VECTORSTORE === 'mongodb' ? 'nodejs' : 'edge';
 
@@ -54,7 +53,6 @@ export async function POST(req: NextRequest) {
       .map(formatVercelMessages);
     const currentMessageContent = messages[messages.length - 1].content;
     const chatId = body.chatId;
-
     
   //////////////////////////////////////////////////////////////////
 
@@ -107,11 +105,12 @@ export async function POST(req: NextRequest) {
             // Extract retrieved source documents so that they can be displayed as sources
             // on the frontend.
             resolveWithDocuments(documents);
+            console.log('Retrieved documents:', documents);
           },
         },
       ],
     });
-
+    console.log('retrieverInfo', retrieverInfo);
     const retriever = retrieverInfo.retriever;
     mongoDbClient = retrieverInfo.mongoDbClient;
 
