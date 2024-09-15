@@ -15,6 +15,7 @@ import { loadMongoDBStore } from '../utils/vector_store/mongo'; // Import the Mo
 
 
 
+
 export const runtime =
   process.env.NEXT_PUBLIC_VECTORSTORE === 'mongodb' ? 'nodejs' : 'edge';
 
@@ -44,8 +45,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
-    const documentStoreId = body.documentStoreId; // Get documentStoreId from the request
-    console.log(body['chatId'])
     if (!messages.length) {
       throw new Error('No messages provided.');
     }
@@ -54,6 +53,7 @@ export async function POST(req: NextRequest) {
       .map(formatVercelMessages);
     const currentMessageContent = messages[messages.length - 1].content;
     const chatId = body.chatId;
+
 
     
   //////////////////////////////////////////////////////////////////
@@ -82,6 +82,7 @@ export async function POST(req: NextRequest) {
   //////////////////////////////////////////////////////////////////
 
     
+
     //const model = new ChatTogetherAI({
     //  modelName: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
     //  temperature: 0,
@@ -107,12 +108,11 @@ export async function POST(req: NextRequest) {
             // Extract retrieved source documents so that they can be displayed as sources
             // on the frontend.
             resolveWithDocuments(documents);
-            console.log('Retrieved documents:', documents);
           },
         },
       ],
     });
-    console.log('retrieverInfo', retrieverInfo);
+
     const retriever = retrieverInfo.retriever;
     mongoDbClient = retrieverInfo.mongoDbClient;
 
