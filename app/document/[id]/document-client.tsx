@@ -1,4 +1,10 @@
+
 'use client';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { SparklesCore } from "@/components/ui/sparkles";
+
+
 
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -43,7 +49,7 @@ export default function DocumentClient({
   >({});
   const [error, setError] = useState('');
   const [chatOnlyView, setChatOnlyView] = useState(false);
-
+  const [showPDF, setShowPDF] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
       api: '/api/chat',
@@ -96,26 +102,46 @@ export default function DocumentClient({
       <Toggle chatOnlyView={chatOnlyView} setChatOnlyView={setChatOnlyView} />
       <div className="flex justify-between w-full lg:flex-row flex-col sm:space-y-20 lg:space-y-0 p-2">
         {/* Left hand side */}
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
-          <div
-            className={`w-full h-[90vh] flex-col text-white !important ${
-              chatOnlyView ? 'hidden' : 'flex'
-            }`}
-          >
-            <div
-              className="align-center bg-[#eeeeee] flex p-1"
-              style={{
-                borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
-            </div>
-            <Viewer
-              fileUrl={pdfUrl as string}
-              plugins={[toolbarPluginInstance, pageNavigationPluginInstance]}
-            />
-          </div>
-        </Worker>
+        {showPDF ? (
+  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
+    <div
+      className={`w-full h-[90vh] flex-col text-white ${
+        chatOnlyView ? 'hidden' : 'flex'
+      }`}
+    >
+      <div
+        className="align-center bg-[#eeeeee] flex p-1"
+        style={{
+          borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
+      </div>
+      <Viewer
+        fileUrl={pdfUrl as string}
+        plugins={[toolbarPluginInstance, pageNavigationPluginInstance]}
+      />
+    </div>
+  </Worker>
+) : (  
+<div className="h-[40rem] relative w-full bg-white flex flex-col items-center justify-center overflow-hidden rounded-md">
+      <div className="w-full absolute inset-0 h-screen">
+        <SparklesCore
+          id="tsparticlesfullpage"
+          background="transparent"
+          minSize={0.6}
+          maxSize={1.4}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#e5751f"
+        />
+      </div>
+      <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-[#861f41] relative z-20">
+        Please let me know your learning preference!
+      </h1>
+    </div>
+  
+  )} 
         {/* Right hand side */}
         <div className="flex flex-col w-full justify-between align-center h-[90vh] no-scrollbar">
           <div
@@ -200,7 +226,7 @@ export default function DocumentClient({
               })}
             </div>
           </div>
-          <div className="flex justify-center items-center sm:h-[15vh] h-[20vh]">
+          <div className="flex justify-center items-center sm:h-[15vh] h-[20vh] mb-5">
             <form
               onSubmit={(e) => handleSubmit(e)}
               className="relative w-full px-4 sm:pt-10 pt-2"
@@ -241,7 +267,18 @@ export default function DocumentClient({
                 )}
               </button>
             </form>
+            
           </div>
+          
+          <ToggleButtonGroup className="flex justify-left items-center pl-10"
+          color="primary"
+          value={1}
+          exclusive
+          aria-label="Platform">
+
+      <ToggleButton value="web" onClick={()=> setShowPDF(true)}>PDF</ToggleButton>
+      <ToggleButton value="android" onClick={()=> setShowPDF(false)}>Markdown</ToggleButton>
+    </ToggleButtonGroup>
           {error && (
             <div className="border border-red-400 rounded-md p-4">
               <p className="text-red-500">{error}</p>
