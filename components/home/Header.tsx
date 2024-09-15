@@ -19,7 +19,7 @@ const Header = () => {
           </Link>
           <Link
             href="/dashboard"
-            className="text-white bg_linear py-1.5 px-[22px] text-center text-xl font-normal  border rounded-[18px] border-solid border-primary "
+            className="text-black bg_linear py-1.5 px-[22px] text-center text-xl font-calibra  border rounded-[18px] border-solid border-primary "
           >
             Sign up
           </Link>
