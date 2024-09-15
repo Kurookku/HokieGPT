@@ -8,7 +8,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="container hidden bg-vt-maroon w-full px-5  h-[78px] sm:flex justify-between items-center border shadow-[0px_1px_4px_0px_rgba(0,0,0,0.25)] rounded-[30px] border-solid border-[rgba(0,0,0,0.17)] mx-auto">
+      <div className="container hidden bg-vt-maroon w-full px-5  h-[78px] sm:flex justify-between items-center border shadow-[0px_1px_4px_0px_#e5e1e6)] rounded-[30px] border-solid border-[rgba(0,0,0,0.17)] mx-auto">
         <Logo />
         <div className="sm:flex gap-4 items-center">
           <Link

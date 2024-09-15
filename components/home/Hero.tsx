@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Hero = () => {
   return (
-    <div className="bg-white container pt-[30px] md:pt-[80px] pb-[100px] sm:pb-[100px] px-[22px] sm:px-0 mx-auto text-center">
+    <div className="bg-[#e5e1e6] container pt-[30px] md:pt-[80px] pb-[100px] sm:pb-[100px] px-[22px] sm:px-0 mx-auto text-center">
       <div className="flex justify-center items-center pb-1">
           <Image
             src="/theme.png"
