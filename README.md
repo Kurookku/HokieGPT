@@ -40,11 +40,10 @@ HokieGPT allows users to upload learning materials in PDF format, select specifi
 
 ## Installation
 1. Clone the repository:
-   ```bash
    git clone https://github.com/yourusername/HokieGPT.git
 2.	Navigate to the project directory:
    cd HokieGPT
-3. Start the backend
+4. Start the backend
    python app.py
-4. Start frontend
+5. Start frontend
    npm start
