@@ -13,6 +13,8 @@ import { ChatOpenAI } from "@langchain/openai";
 import { classifyIntent, adjustPDF } from '../flaskAPI/helper'; 
 import { loadMongoDBStore } from '../utils/vector_store/mongo'; // Import the MongoDB store helper function
 
+export const IS_FEATURE_ENABLED: boolean = true;
+
 
 export const runtime =
   process.env.NEXT_PUBLIC_VECTORSTORE === 'mongodb' ? 'nodejs' : 'edge';
@@ -39,6 +41,8 @@ const formatVercelMessages = (message: VercelChatMessage) => {
  */
 export async function POST(req: NextRequest) {
   let mongoDbClient: MongoClient | undefined;
+  const adjust = 'false';
+
 
   try {
     const body = await req.json();
@@ -60,9 +64,13 @@ export async function POST(req: NextRequest) {
     const flaskData = await classifyIntent(currentMessageContent);
     const classification = String(flaskData.classification).toLowerCase();
     const justification = String(flaskData.justification).toLowerCase();
+    
 
   // If the classification is "adjust", call the /adjust-markdown API with the document ID
   if (classification === 'adjust') {
+      const adjust = 'true';
+
+    
   
     // Get the `docstore_document_id` from metadata
     //const documentStoreId = documents[0]?.metadata?.docstore_document_id;
@@ -140,6 +148,7 @@ export async function POST(req: NextRequest) {
       headers: {
         'x-message-index': (formattedPreviousMessages.length + 1).toString(),
         'x-sources': serializedSources,
+        'x-adjust': adjust,
       },
     });
   } catch (e: any) {

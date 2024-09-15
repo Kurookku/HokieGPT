@@ -17,6 +17,26 @@ import { Document } from '@prisma/client';
 import { useChat } from 'ai/react';
 import Toggle from '@/components/ui/Toggle';
 
+// Add this above the DocumentClient function
+function downloadPDF(sessionId: string) {
+  const formData = new FormData();
+  formData.append('session_id', sessionId);
+
+  fetch('http://localhost:5001/download-pdf', {
+    method: 'POST',
+    body: formData,
+  })
+    .then(response => response.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${sessionId}_DEI_output.pdf`;
+      link.click();
+    })
+    .catch(err => console.error('Download error:', err));
+}
+
 export default function DocumentClient({
   currentDoc,
   userImage,
@@ -55,6 +75,10 @@ export default function DocumentClient({
         const sources = sourcesHeader ? JSON.parse(atob(sourcesHeader)) : [];
 
         const messageIndexHeader = response.headers.get('x-message-index');
+        const adjustFlag = response.headers.get('x-adjust');
+        var boolValue = (adjustFlag =="true");   //returns true
+
+
         if (sources.length && messageIndexHeader !== null) {
           setSourcesForMessages({
             ...sourcesForMessages,
@@ -200,6 +224,8 @@ export default function DocumentClient({
               })}
             </div>
           </div>
+
+
           <div className="flex justify-center items-center sm:h-[15vh] h-[20vh]">
             <form
               onSubmit={(e) => handleSubmit(e)}
@@ -221,6 +247,15 @@ export default function DocumentClient({
                   isLoading ? 'Waiting for response...' : 'Ask me anything...'
                 }
               />
+              {/* Add Download PDF Button here */}
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => downloadPDF(chatId)}  
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Download PDF
+            </button>
+          </div>
               <button
                 type="submit"
                 disabled={isLoading}
@@ -251,4 +286,5 @@ export default function DocumentClient({
       </div>
     </div>
   );
+  
 }

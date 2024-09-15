@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from openai import OpenAI
 import os
 import base64
@@ -6,6 +6,8 @@ import requests
 from pathlib import Path
 from pdf2image import convert_from_path
 from dotenv import load_dotenv
+from markdown_pdf import MarkdownPdf, Section
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -21,6 +23,22 @@ app = Flask(__name__)
 def encode_image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+
+# Function to convert markdown files to a single PDF
+def markdown_files_to_pdf(session_id, output_pdf_path):
+    print(session_id)
+    pdf = MarkdownPdf(toc_level=2)  # Set TOC level (optional)
+    markdown_dir = os.path.join("pdf_conversions", session_id, "adjusted_markdowns")
+    
+    # Iterate over each markdown file in the adjusted_markdowns folder
+    for markdown_file in sorted(Path(markdown_dir).glob('*.md')):
+        with open(markdown_file, 'r', encoding='utf-8') as file:
+            markdown_text = file.read()
+            pdf.add_section(Section(markdown_text))  # Add markdown content as a section
+
+    # Save the PDF file
+    pdf.save(output_pdf_path)
 
 # Function to convert an image to markdown using OpenAI
 def image_to_markdown(base64_image, api_key):
@@ -74,6 +92,31 @@ def clean_markdown_content(text, instruction):
         cleaned_content = "Error in processing markdown content."
     
     return cleaned_content
+
+# Flask API endpoint to generate and download a PDF
+@app.route('/download-pdf', methods=['POST'])
+def download_pdf():
+    print("Converting markdown to PDF for download!")
+    
+    # Get session_id from the form data
+    session_id = request.form.get('session_id')
+    print("SESSION ID: ........", session_id)
+    
+    # Define the input directory for adjusted markdowns and the output PDF path
+    adjusted_markdown_dir = os.path.join("pdf_conversions", session_id, "adjusted_markdowns")
+    output_pdf_path = os.path.join("pdf_conversions", session_id, "output.pdf")
+    
+    if not os.path.exists(adjusted_markdown_dir):
+        return jsonify({"error": f"Adjusted markdown folder for session {session_id} not found."}), 400
+
+    # Convert the adjusted markdown files into a single PDF
+    markdown_files_to_pdf(session_id, output_pdf_path)
+
+    print(f"Markdowns converted to PDF at {output_pdf_path}")
+
+    # Send the PDF back to the user as a downloadable file
+    return send_file(output_pdf_path, as_attachment=True, download_name=f"{session_id}_output.pdf")
+
 
 
 # Flask API endpoint to convert a PDF to markdown and save the original PDF
