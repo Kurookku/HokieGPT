@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 from openai import OpenAI
-import os
 from pathlib import Path
 import requests
+
+import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -104,4 +105,4 @@ def generate_quiz():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(port=5003)
+    app.run(port=5003, debug = True)

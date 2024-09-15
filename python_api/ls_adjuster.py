@@ -17,7 +17,6 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # Initialize the Flask app
 app = Flask(__name__)
 
-
 # Function to convert images to base64
 def encode_image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
@@ -77,25 +76,30 @@ def clean_markdown_content(text, instruction):
     return cleaned_content
 
 
-# Flask API endpoint to convert a PDF to markdown
+# Flask API endpoint to convert a PDF to markdown and save the original PDF
 @app.route('/convert-pdf', methods=['POST'])
 def convert_pdf():
     print("Converting PDF to Images")
-    # Get the PDF path from the request
-    data = request.get_json()
-    pdf_path = data.get('pdf_path')
-
-    if not os.path.exists(pdf_path):
-        return jsonify({"error": "PDF file not found."}), 400
     
-    # Create a directory specific to the PDF file name
-    file_name = Path(pdf_path).stem  # Extract the file name without the extension
-    pdf_dir = os.path.join("pdf_conversions", file_name)
-    if not os.path.exists(pdf_dir):
-        os.makedirs(pdf_dir)
+    # Get user_id and session_name from the form data
+    user_id = request.form.get('user_id')
+    session_name = request.form.get('session_name')
+    pdf_file = request.files.get('pdf_file')  # Get the uploaded PDF file
+
+    if not pdf_file:
+        return jsonify({"error": "PDF file not uploaded."}), 400
+    
+    # Create a directory specific to the user and session
+    session_dir = os.path.join("pdf_conversions", f"{session_name}")
+    if not os.path.exists(session_dir):
+        os.makedirs(session_dir)
+    
+    # Save the original PDF to the session directory
+    pdf_path = os.path.join(session_dir, pdf_file.filename)
+    pdf_file.save(pdf_path)
 
     # Convert PDF pages to images
-    images_dir = os.path.join(pdf_dir, "images")
+    images_dir = os.path.join(session_dir, "images")
     if not os.path.exists(images_dir):
         os.makedirs(images_dir)
     
@@ -109,7 +113,7 @@ def convert_pdf():
     
     # Convert images to markdown
     markdown_contents = []
-    markdown_dir = os.path.join(pdf_dir, "markdown")
+    markdown_dir = os.path.join(session_dir, "markdown")
     if not os.path.exists(markdown_dir):
         os.makedirs(markdown_dir)
 
@@ -130,24 +134,27 @@ def convert_pdf():
 @app.route('/adjust-markdown', methods=['POST'])
 def adjust_markdown():
     print("Adjusting markdown!")
-    # Get PDF name and instructions from the request
-    data = request.get_json()
-    pdf_name = data.get('pdf_name')
-    instruction = data.get('instruction', 'Clean up irrelevant text and adjust formatting.')
     
-    # Define the input and output directories based on the PDF name
-    pdf_markdown_dir = os.path.join("pdf_conversions", pdf_name, "markdown")
-    adjusted_markdown_dir = os.path.join("pdf_conversions", pdf_name, "adjusted_markdowns")
+    # Get user_id, session_name, and instructions from the form data
+    user_id = request.form.get('user_id')
+    session_name = request.form.get('session_name')
+    instruction = request.form.get('instruction', 'Clean up irrelevant text and adjust formatting.')
+
+    print(user_id, session_name, instruction)
     
-    if not os.path.exists(pdf_markdown_dir):
-        return jsonify({"error": f"Markdown folder for {pdf_name} not found."}), 400
+    # Define the input and output directories based on user ID and session name
+    markdown_dir = os.path.join("pdf_conversions", f"{session_name}", "markdown")
+    adjusted_markdown_dir = os.path.join("pdf_conversions", f"{session_name}", "adjusted_markdowns")
+    
+    if not os.path.exists(markdown_dir):
+        return jsonify({"error": f"Markdown folder for {session_name} not found."}), 400
     
     # Create output directory for adjusted markdowns if it doesn't exist
     if not os.path.exists(adjusted_markdown_dir):
         os.makedirs(adjusted_markdown_dir)
     
     # Iterate through markdown files in the PDF markdown folder and clean/adjust content
-    for markdown_file in Path(pdf_markdown_dir).glob('*.md'):
+    for markdown_file in Path(markdown_dir).glob('*.md'):
         print(f"Processing {markdown_file.name}...")
         
         with open(markdown_file, 'r', encoding='utf-8') as file:
@@ -167,4 +174,4 @@ def adjust_markdown():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(port=5002)
+    app.run(port=5001, debug=True)

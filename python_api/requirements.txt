@@ -1,7 +1,7 @@
 openai
 flask
-
+requests
 pdf2image
-# poppler
+# apt-get install poppler-utils
 
 python-dotenv

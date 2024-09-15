@@ -27,6 +27,15 @@ jobs:
           POSTGRES_PRISMA_URL=${{ secrets.POSTGRES_PRISMA_URL }}" >> ./.env
 
       - name: pm2 run
-        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 delete 0 && pm2 start "npm run dev" --name HokieGPT
+        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/ && pm2 delete all && pm2 start "npm run dev" --name HokieGPT_node
+        
+      - name: python installs
+        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis && pip install requirements.txt && apt-get install poppler
 
-          
+      - name: pm2 run python
+        run: |
+          cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis
+          pm2 start "python input_classifier.py"
+          pm2 start "python classify_ld.py"
+          pm2 start "python adjuster.py"
+          pm2 start "python quiz_gen.py"

@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from openai import OpenAI
 import json
-import os 
+
+import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -82,4 +83,4 @@ def classify():
 
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5000, debug = True)

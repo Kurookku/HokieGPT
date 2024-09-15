@@ -6,6 +6,7 @@ import { getAuth } from '@clerk/nextjs/server';
 import { loadEmbeddingsModel } from '../utils/embeddings';
 import { loadVectorStore } from '../utils/vector_store';
 import { type MongoClient } from 'mongodb';
+import { convertPDF } from '../flaskAPI/helper'; 
 
 export async function POST(request: Request) {
   let mongoDbClient: MongoClient | null = null;
@@ -37,10 +38,29 @@ export async function POST(request: Request) {
       userId,
     },
   });
-
   const namespace = doc.id;
 
+
   try {
+  /////////////////////////////////////////////////////////////////////////////////////////    
+    // Call the Flask API to convert the PDF to markdown
+    const pdfFile = await fetch(fileUrl); // Fetch the PDF file from the URL
+    const pdfBlob = await pdfFile.blob(); // Convert it to a blob to send it to the Flask API
+    console.log(fileUrl)
+
+
+    // Use the convertPDF function to convert the PDF via the Flask API
+    const flaskResponse = await convertPDF(userId, namespace, pdfBlob);
+
+    if (flaskResponse.error) {
+      throw new Error(`PDF conversion failed: ${flaskResponse.error}`);
+    }
+
+    console.log('PDF successfully converted to markdown:', flaskResponse);
+
+  /////////////////////////////////////////////////////////////////////////////////////////    
+
+
     /* load from remote pdf URL */
     const response = await fetch(fileUrl);
     const buffer = await response.blob();

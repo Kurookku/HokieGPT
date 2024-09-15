@@ -8,6 +8,12 @@ import { ChatTogetherAI } from '@langchain/community/chat_models/togetherai';
 import { type MongoClient } from 'mongodb';
 import { loadRetriever } from '../utils/vector_store';
 import { loadEmbeddingsModel } from '../utils/embeddings';
+import { ChatOpenAI } from "@langchain/openai";
+
+import { classifyIntent, adjustPDF } from '../flaskAPI/helper'; 
+import { loadMongoDBStore } from '../utils/vector_store/mongo'; // Import the MongoDB store helper function
+
+
 
 export const runtime =
   process.env.NEXT_PUBLIC_VECTORSTORE === 'mongodb' ? 'nodejs' : 'edge';
@@ -38,6 +44,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
+    const documentStoreId = body.documentStoreId; // Get documentStoreId from the request
+    console.log(body['chatId'])
     if (!messages.length) {
       throw new Error('No messages provided.');
     }
@@ -47,12 +55,43 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
     const chatId = body.chatId;
 
-    const model = new ChatTogetherAI({
-      modelName: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-      temperature: 0,
-    });
+    
+  //////////////////////////////////////////////////////////////////
 
-    const embeddings = loadEmbeddingsModel();
+    // Call Flask API to classify the intent
+    const flaskData = await classifyIntent(currentMessageContent);
+    const classification = String(flaskData.classification).toLowerCase();
+    const justification = String(flaskData.justification).toLowerCase();
+
+  // If the classification is "adjust", call the /adjust-markdown API with the document ID
+  if (classification === 'adjust') {
+  
+    // Get the `docstore_document_id` from metadata
+    //const documentStoreId = documents[0]?.metadata?.docstore_document_id;
+    const documentStoreId = body['chatId']
+
+    if (documentStoreId) {
+      // Call adjust PDF API with the document store ID
+      const adjustData = await adjustPDF(currentMessageContent, documentStoreId);
+      console.log('Adjusted PDF response:', adjustData);
+    } else {
+      console.warn('No document store ID found in the metadata.');
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////
+
+    
+    //const model = new ChatTogetherAI({
+    //  modelName: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+    //  temperature: 0,
+    //});
+    const model = new ChatOpenAI({
+      modelName: 'gpt-4-1106-preview',
+      apiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.1,
+    });
+    const embeddings = await loadEmbeddingsModel();
 
     let resolveWithDocuments: (value: Document[]) => void;
     const documentPromise = new Promise<Document[]>((resolve) => {

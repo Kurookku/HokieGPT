@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from openai import OpenAI
-import os
 import json
+
+import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -13,6 +14,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 app = Flask(__name__)
+
 
 # Few-shot prompting example to classify learning styles
 def classify_learning_style(description):
@@ -122,5 +124,4 @@ def classify():
     return jsonify(result)
 
 if __name__ == '__main__':
-    
-    app.run(port=5001)
+    app.run(port=5002, debug = True)

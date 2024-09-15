@@ -1,2 +1,4 @@
 node_modules/
+*.env
+.next/
 python_api/pdf_conversions/

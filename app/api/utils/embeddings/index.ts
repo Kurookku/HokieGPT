@@ -37,25 +37,33 @@
 //     modelName: 'text-embedding-3-small', // OpenAI’s embedding model
 //   });
 
-const { Configuration, OpenAIApi } = require("openai");
 
-export async function loadEmbeddingsModel(texts: string[]): Promise<number[][]> {
-  const configuration = new Configuration({
+//const { Configuration, OpenAIApi } = require("openai");export async function loadEmbeddingsModel(texts: string[]): Promise<number[][]> {
+//
+//  const configuration = new Configuration({
+//    apiKey: process.env.OPENAI_API_KEY,
+//  });
+//  const openai = new OpenAIApi(configuration);
+//
+//  const embeddings: number[][] = [];
+//
+//  for (const text of texts) {
+//    const response = await openai.createEmbedding({
+//      model: 'text-embedding-ada-002',
+ //     input: text,
+ //   });
+ //   embeddings.push(response.data.data[0].embedding);
+//  }
+//
+//  return embeddings;
+//}
+import { OpenAIEmbeddings } from '@langchain/openai';
+
+export function loadEmbeddingsModel() {
+  return new OpenAIEmbeddings({
     apiKey: process.env.OPENAI_API_KEY,
+    modelName: 'text-embedding-3-small', // OpenAI’s embedding model
   });
-  const openai = new OpenAIApi(configuration);
-
-  const embeddings: number[][] = [];
-
-  for (const text of texts) {
-    const response = await openai.createEmbedding({
-      model: 'text-embedding-ada-002',
-      input: text,
-    });
-    embeddings.push(response.data.data[0].embedding);
-  }
-
-  return embeddings;
 }
 
 // Example usage (if needed):
