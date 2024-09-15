@@ -34,8 +34,7 @@ jobs:
 
       - name: pm2 run python
         run: |
-          cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis
-          pm2 start "python input_classifier.py"
-          pm2 start "python classify_ld.py"
-          pm2 start "python adjuster.py"
-          pm2 start "python quiz_gen.py"
+          cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis && pm2 start "python input_classifier.py"
+          cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis && pm2 start "python classify_ld.py"
+          cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis && pm2 start "python adjuster.py"
+          cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis && pm2 start "python quiz_gen.py"
