@@ -8,12 +8,12 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="container hidden bg-white w-full px-5  h-[78px] sm:flex justify-between items-center border shadow-[0px_1px_4px_0px_rgba(0,0,0,0.25)] rounded-[30px] border-solid border-[rgba(0,0,0,0.17)] mx-auto">
+      <div className="container hidden bg-vt-maroon w-full px-5  h-[78px] sm:flex justify-between items-center border shadow-[0px_1px_4px_0px_rgba(0,0,0,0.25)] rounded-[30px] border-solid border-[rgba(0,0,0,0.17)] mx-auto">
         <Logo />
         <div className="sm:flex gap-4 items-center">
           <Link
             href="/dashboard"
-            className="text-primary py-1.5 px-[22px] text-center text-xl font-normal border rounded-[18px] border-solid border-primary "
+            className="bg-white text-primary py-1.5 px-[22px] text-center text-xl font-normal border rounded-[18px] border-solid border-primary "
           >
             Log in
           </Link>
@@ -26,7 +26,7 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="sm:hidden bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border-b-[0.5px] h-[54px] flex justify-between items-center px-6 border-b-white border-solid">
+      <div className="sm:hidden bg-vt-maroon  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border-b-[0.5px] h-[54px] flex justify-between items-center px-6 border-b-white border-solid">
         <Logo isMobile={true} />
         <div className="flex justify-center items-baseline">
           <Image
@@ -40,8 +40,8 @@ const Header = () => {
         </div>
       </div>
       {open ? (
-        <div className="flex sm:hidden gap-4 items-center py-3 bg-white shadow px-5">
-          <button className="text-primary py-1 px-[22px] text-center text-lg font-normal  border rounded-[18px] border-solid border-primary ">
+        <div className="flex sm:hidden gap-4 items-center py-3 bg-vt-maroon shadow px-5">
+          <button className="bg-white text-primary py-1 px-[22px] text-center text-lg font-normal  border rounded-[18px] border-solid border-primary ">
             Log in
           </button>
           <button className="text-white bg_linear py-1 px-[22px] text-center text-lg font-normal  border rounded-[18px] border-solid border-primary ">

@@ -11,16 +11,16 @@ const Logo = ({ isMobile }: LogoProps) => {
       <div className="flex  items-center">
         <div className="flex justify-center items-center">
           <Image
-            src="/logo.png"
+            src="/VTlogo.png"
             alt="Logo"
-            width={30}
+            width={60}
             height={34}
-            className="sm:w-[30px] w-[21px] h-[25px] sm:h-[30px] mt-1"
+            className="sm:w-[60px] w-[50px] h-[25px] sm:h-[30px] mt-1"
           />
         </div>
         {!isMobile ? (
-          <h1 className="shadows  text-primary text-[32px] sm:text-[35px]">
-            PDFtoChat
+          <h1 className="text-white shadows  text-primary text-[32px] sm:text-[35px] px-1">
+            HokieGPT
           </h1>
         ) : null}
       </div>

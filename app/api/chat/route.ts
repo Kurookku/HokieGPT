@@ -107,11 +107,12 @@ export async function POST(req: NextRequest) {
             // Extract retrieved source documents so that they can be displayed as sources
             // on the frontend.
             resolveWithDocuments(documents);
+            console.log('Retrieved documents:', documents);
           },
         },
       ],
     });
-
+    console.log('retrieverInfo', retrieverInfo);
     const retriever = retrieverInfo.retriever;
     mongoDbClient = retrieverInfo.mongoDbClient;
 
