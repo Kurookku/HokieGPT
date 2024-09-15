@@ -19,7 +19,7 @@ export default async function Home() {
       <Header />
       <Hero />
       <HowItWorks />
-      <ProudlyOpenSource />
+      {/* <ProudlyOpenSource /> */}
       <Footer />
     </main>
   );
