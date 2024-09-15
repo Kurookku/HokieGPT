@@ -35,7 +35,7 @@ jobs:
         
         
       - name: python installs
-        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_apis && pip install requirements.txt && apt-get install poppler
+        run: cd /home/ec2-user/actions-runner/_work/HokieGPT/HokieGPT/python_api && pip install requirements.txt && apt-get install poppler poppler-utils
 
       - name: pm2 run python
         run: |
