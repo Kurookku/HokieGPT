@@ -72,7 +72,7 @@ export default function DashboardClient({ docsList }: { docsList: any }) {
 
   return (
     <div className="mx-auto flex flex-col gap-4 container mt-10">
-      <h1 className="text-4xl leading-[1.1] tracking-tighter font-medium text-center">
+      <h1 className="text-4xl leading-[1.1] tracking-tighter font-medium text-center text-vt-burntOrange">
         Chat With Your PDFs
       </h1>
       {docsList.length > 0 && (
@@ -97,7 +97,7 @@ export default function DashboardClient({ docsList }: { docsList: any }) {
         </div>
       )}
       {docsList.length > 0 ? (
-        <h2 className="text-3xl leading-[1.1] tracking-tighter font-medium text-center">
+        <h2 className="text-3xl leading-[1.1] tracking-tighter font-medium text-center text-vt-burntOrange">
           Or upload a new PDF
         </h2>
       ) : (
